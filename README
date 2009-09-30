@@ -1,0 +1,7 @@
+You can run the tests by opening spec/javascripts/fixtures/jquery.omniture.html
+
+I would really like to know how this plugin can be improved. I feel bad about 
+the overkill of including all of BlueRidge and would also like to figure out a 
+way to make an actual omniture prototype instead of just a single method. 
+
+halp plz?
