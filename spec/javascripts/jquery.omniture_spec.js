@@ -6,7 +6,7 @@ Screw.Unit(function(){
     before(function(){ 
       s_objectID = undefined; 
       omnitureClickmapSent = false;
-      s = {tl: function(){ omnitureClickmapSent = true; }}; // global. omniture fails epicly.
+      s = {}; // global. omniture fails epicly.
       });
 
     after(function() { teardownFixtures(); });
@@ -31,24 +31,24 @@ Screw.Unit(function(){
 
     it("should send the Omniture Clickmap(function) when an element which doesn't leave the page is clicked", function() {
       fixture($('<a href="#">baz</a>'));
+      mock(s).should_receive("tl").with_arguments(true,'o','baz').at_least(1, "times");
 
       $('a').attachOmnitureClickMap(function() { return $(this).text(); }, {remote: true});
       expect(typeof s_objectID).to(equal, 'undefined');
 
       $('a').click();
       expect(s_objectID).to(equal, 'baz');
-      expect(omnitureClickmapSent).to(equal, true);
       });
 
     it("should send the Omniture Clickmap(string) when an element which doesn't leave the page is clicked", function() {
       fixture($('<a href="#">baz</a>'));
+      mock(s).should_receive("tl").with_arguments(true,'o','boo').at_least(1, "times");
 
       $('a').attachOmnitureClickMap('boo', {remote: true});
       expect(typeof s_objectID).to(equal, 'undefined');
 
       $('a').click();
       expect(s_objectID).to(equal, 'boo');
-      expect(omnitureClickmapSent).to(equal, true);
       });
   });
 });
