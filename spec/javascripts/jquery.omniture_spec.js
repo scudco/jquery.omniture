@@ -31,7 +31,7 @@ Screw.Unit(function(){
 
     it("should send the Omniture Clickmap(function) when an element which doesn't leave the page is clicked", function() {
       fixture($('<a href="#">baz</a>'));
-      mock(s).should_receive("tl").with_arguments(true,'o','baz').at_least(1, "times");
+      mock(s).should_receive("tl").with_arguments(true,'o').at_least(1, "times");
 
       $('a').attachOmnitureClickMap(function() { return $(this).text(); }, {remote: true});
       expect(typeof s_objectID).to(equal, 'undefined');
@@ -42,13 +42,27 @@ Screw.Unit(function(){
 
     it("should send the Omniture Clickmap(string) when an element which doesn't leave the page is clicked", function() {
       fixture($('<a href="#">baz</a>'));
-      mock(s).should_receive("tl").with_arguments(true,'o','boo').at_least(1, "times");
+      mock(s).should_receive("tl").with_arguments(true,'o').at_least(1, "times");
 
       $('a').attachOmnitureClickMap('boo', {remote: true});
       expect(typeof s_objectID).to(equal, 'undefined');
 
       $('a').click();
       expect(s_objectID).to(equal, 'boo');
+      });
+
+    it("should set separate Omniture Clickmaps when attaching on multiple elements", function() {
+      fixture($('<div></div>').append('<a id="first" href="#">first</a><a id="second" href="#">second</a>'));
+      mock(s).should_receive("tl").with_arguments(true,'o').at_least(2, "times");
+
+      $('a').attachOmnitureClickMap(function() { return $(this).text(); }, {remote: true});
+      expect(typeof s_objectID).to(equal, 'undefined');
+
+      $('a#first').click();
+      expect(s_objectID).to(equal, 'first');
+
+      $('a#second').click();
+      expect(s_objectID).to(equal, 'second');
       });
   });
 });
