@@ -31,7 +31,7 @@ Screw.Unit(function(){
 
     it("should send the Omniture Clickmap(function) when an element which doesn't leave the page is clicked", function() {
       fixture($('<a href="#">baz</a>'));
-      mock(s).should_receive("tl").with_arguments(true,'o').at_least(1, "times");
+      mock(s).should_receive("tl").with_arguments(true,'o','baz').at_least(1, "times");
 
       $('a').attachOmnitureClickMap(function() { return $(this).text(); }, {remote: true});
       expect(typeof s_objectID).to(equal, 'undefined');
@@ -42,7 +42,7 @@ Screw.Unit(function(){
 
     it("should send the Omniture Clickmap(string) when an element which doesn't leave the page is clicked", function() {
       fixture($('<a href="#">baz</a>'));
-      mock(s).should_receive("tl").with_arguments(true,'o').at_least(1, "times");
+      mock(s).should_receive("tl").with_arguments(true,'o','boo').at_least(1, "times");
 
       $('a').attachOmnitureClickMap('boo', {remote: true});
       expect(typeof s_objectID).to(equal, 'undefined');
@@ -53,7 +53,9 @@ Screw.Unit(function(){
 
     it("should set separate Omniture Clickmaps when attaching on multiple elements", function() {
       fixture($('<div></div>').append('<a id="first" href="#">first</a><a id="second" href="#">second</a>'));
-      mock(s).should_receive("tl").with_arguments(true,'o').at_least(2, "times");
+      mock(s).should_receive("tl").with_arguments(true,'o','first').exactly(1, "times");
+      // This is failing due to my lack of knowledge around Smoke
+      mock(s).should_receive("tl").with_arguments(true,'o','second').exactly(1, "times");
 
       $('a').attachOmnitureClickMap(function() { return $(this).text(); }, {remote: true});
       expect(typeof s_objectID).to(equal, 'undefined');
